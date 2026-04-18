@@ -1,2 +1,2 @@
 # axiom-launcher
-Axiom Launcher
+Axiom Launcher - GDPS лаунчер
