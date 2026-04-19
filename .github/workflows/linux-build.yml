@@ -11,20 +11,18 @@ jobs:
       - name: Prepare GDPS Package
         run: |
           mkdir -p release/MyGDPS-Linux
-          
-          # 1. Скачиваем твой ZIP из релизов
-          wget https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/Axiom.Dash._.ADPS.zip -O game.zip
-          
-          # 2. Распаковываем его в папку для линукса
+          wget https://github.com -O game.zip
           unzip game.zip -d release/MyGDPS-Linux/
           
-          # 3. Создаем скрипт запуска
+          # ПЕРЕИМЕНОВЫВАЕМ ФАЙЛ (убираем вертикальную черту)
+          # Замени старое имя на новое без черточки
+          cd release/MyGDPS-Linux/
+          mv "Axiom Dash | ADPS.exe" "Axiom_Dash_ADPS.exe" 2>/dev/null || true
+          cd ../..
+
+          # Создаем скрипт-запускатор с НОВЫМ именем
           echo '#!/bin/bash' > release/MyGDPS-Linux/start.sh
-          # ВАЖНО: Проверь, как называется .exe внутри зипки. 
-          # Если он называется "Axiom Dash.exe", то пиши: wine "Axiom Dash | ADPS.exe"
-          echo 'wine "Axiom Dash.exe"' >> release/MyGDPS-Linux/start.sh
-          
-          # 4. Даем права на запуск скрипту
+          echo 'wine Axiom_Dash_ADPS.exe' >> release/MyGDPS-Linux/start.sh
           chmod +x release/MyGDPS-Linux/start.sh
 
       - name: Upload Artifact
