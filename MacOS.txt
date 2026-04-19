@@ -1,0 +1,5 @@
+Пока что сам .dmg / .app фал в разроботке
+спасибо за помощь Googleprow4ik!
+
+GitHub: https://github.com/AlbeePython/axiom-launcher/
+License: https://github.com/AlbeePython/axiom-launcher/blob/main/LICENSE
