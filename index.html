@@ -1,245 +1,255 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axiom Dash кто то это читает?</title>
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <title>Axiom Dash — Сила Синего</title>
+    
+    <!-- Иконка вкладки: Синяя буква А -->
+    <link rel="icon" href="https://icons8.com" type="image/x-icon">
+    
+    <link rel="stylesheet" href="https://кто-то_это_читает?.ответ_нет!">
     <style>
-        /* Плавная прокрутка */
-        html {
-            scroll-behavior: smooth;
+        :root {
+            --bg-dark: #050a0f;
+            --accent-blue: #3498db;
+            --deep-blue: #1a2a3a;
+            --glass: rgba(26, 42, 58, 0.8);
+            --text-blue: #d1e8ff;
         }
 
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
-        body {
-            background-color: #080808;
-            color: #ffffff;
-            line-height: 1.6;
-        }
-
-        /* Шапка с сильным скруглением */
+        /* Закругленное "летающее" меню */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(15px);
             position: fixed;
-            width: 90%;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
+            width: 90%;
+            max-width: 1000px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
             z-index: 1000;
-            border-radius: 40px; /* Закругленность шапки */
-            border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 50px; /* Сильное закругление */
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #e63946;
-            text-transform: uppercase;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            color: #e63946;
-        }
-
-        /* Секции */
-        section {
-            padding: 120px 10% 60px;
-            min-height: 80vh;
+        .nav-container {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 10px 30px;
         }
 
+        .logo { font-weight: 900; font-size: 20px; color: white; }
+        .logo span { color: var(--accent-blue); }
+
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-blue);
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .nav-links a:hover { color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-blue); }
+
+        /* Главный экран */
         .hero {
-            background: radial-gradient(circle at center, rgba(230, 57, 70, 0.15) 0%, transparent 70%);
-        }
-
-        h1 {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            color: #e63946;
-            text-shadow: 0 0 30px rgba(230, 57, 70, 0.4);
-        }
-
-        /* Кнопки-капсулы */
-        .btn-group {
+            height: 100vh;
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a2a3a 0%, #050a0f 100%);
+            position: relative;
         }
 
+        /* Наклонная карточка в синем цвете */
+        .hero-card {
+            background: rgba(15, 25, 35, 0.9);
+            padding: 70px 100px;
+            transform: skewX(-10deg);
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 70px rgba(52, 152, 219, 0.2);
+            position: relative;
+        }
+
+        .hero-content { transform: skewX(10deg); text-align: center; }
+        .hero-content h1 { 
+            font-size: 100px; 
+            margin: 0; 
+            font-weight: 900; 
+            background: linear-gradient(to bottom, #ffffff, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-content p { font-size: 22px; color: var(--text-blue); margin: 20px 0 40px; letter-spacing: 2px; }
+
+        /* Кнопки в синем стиле */
+        .btn-group { display: flex; gap: 20px; justify-content: center; }
         .btn {
-            padding: 16px 35px;
-            border-radius: 100px; /* Максимальная закругленность */
             text-decoration: none;
-            color: #fff;
+            background: var(--accent-blue);
+            color: white;
+            padding: 16px 35px;
+            border-radius: 50px;
             font-weight: bold;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            transition: 0.4s;
+            border: none;
         }
-
-        .btn-red { background: #e63946; box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3); }
-        .btn-red:hover { transform: scale(1.1); background: #ff4d5a; }
-
-        /* Раздел Новостей */
-        .news-container {
-            background: #111;
-            width: 100%;
-            max-width: 800px;
-            padding: 40px;
-            border-radius: 30px; /* Закругленность разделов */
-            border-left: 5px solid #5865F2;
-            position: relative;
-            overflow: hidden;
+        .btn:hover { 
+            background: white; 
+            color: var(--accent-blue); 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4);
         }
+        .btn-gh { background: transparent; border: 2px solid var(--accent-blue); }
 
-        .news-tag {
-            background: #5865F2;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .news-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #5865F2;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* Сетка инфо */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 50px;
-        }
-
-        .info-card {
-            background: #151515;
-            padding: 40px;
-            border-radius: 35px; /* Закругленность карточек */
-            border: 1px solid #222;
+        /* Блок статистики с неоновым свечением */
+        .stats-section {
+            padding: 100px 20px;
+            background: #070e14;
             text-align: center;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 50px auto;
+        }
+
+        .stat-item h2 { font-size: 65px; color: white; margin: 0; text-shadow: 0 0 20px var(--accent-blue); }
+        .stat-item p { color: var(--accent-blue); font-weight: bold; letter-spacing: 3px; margin-top: 10px; }
+
+        /* О проекте */
+        .about-section { padding: 120px 20px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .info-card {
+            background: rgba(255,255,255,0.03);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(52, 152, 219, 0.1);
             transition: 0.3s;
         }
+        .info-card:hover { background: rgba(52, 152, 219, 0.05); border-color: var(--accent-blue); }
+        .info-card h3 { color: var(--accent-blue); font-size: 28px; margin-bottom: 20px; }
+        .info-card p { color: #a5b8c9; line-height: 1.8; font-size: 16px; }
 
-        .info-card:hover {
-            border-color: #e63946;
-            background: #1a1a1a;
-        }
-
+        /* Футер */
         footer {
+            padding: 80px 20px;
+            background: #03070a;
             text-align: center;
-            padding: 50px;
-            opacity: 0.4;
-            font-size: 0.8rem;
+            border-top: 1px solid rgba(52, 152, 219, 0.1);
         }
+        .footer-nav { margin: 30px 0; display: flex; justify-content: center; gap: 30px; }
+        .footer-nav a { color: #5d7a8f; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .footer-nav a:hover { color: white; }
 
         @media (max-width: 768px) {
-            h1 { font-size: 3rem; }
-            header { width: 95%; flex-direction: column; gap: 10px; border-radius: 20px; }
-            nav a { margin: 0 10px; font-size: 0.7rem; }
+            .nav-links { display: none; }
+            .hero-card { transform: none; padding: 40px 20px; width: 85%; }
+            .hero-content { transform: none; }
+            .hero-content h1 { font-size: 60px; }
+            .about-section { grid-template-columns: 1fr; }
+            .stats-grid { flex-direction: column; gap: 40px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">Axiom Dash</div>
-        <nav>
-            <a href="#home">Главная</a>
-            <a href="#news">Новости</a>
-            <a href="#info">Инфо</a>
-            <a href="#download">Скачать</a>
-        </nav>
+        <div class="nav-container">
+            <div class="logo">AXIOM<span>DASH</span></div>
+            <nav class="nav-links">
+                <a href="#home">Главная</a>
+                <a href="#stats">Статистика</a>
+                <a href="#about">О проекте</a>
+                <a href="https://axiomdash.ps.fhgdps.com/dashboard/">Панель</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- ГЛАВНАЯ -->
-    <section id="home" class="hero">
-        <h1>AXIOM DASH</h1>
-        <p style="margin-bottom: 30px; opacity: 0.7;">Твой путь к новым вершинам начинается здесь.</p>
-        <div class="btn-group" id="download">
-            <a href="https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/Axiom.Dash._.ADPS.zip" class="btn btn-red"><i class="fab fa-windows"></i> Windows</a>
-            <a href="https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/Axiom.Dash._.ADPS.apk" class="btn btn-red"><i class="fab fa-android"></i> Android</a>
-            <a href="https://github.com/AlbeePython/axiom-launcher/wiki/%D0%9A%D0%B0%D0%BA-%D0%B8%D0%B3%D1%80%D0%B0%D1%82%D1%8C-%D0%B2-ADPS-%D1%81-MacOS%3F" class="btn btn-red"><i class="fab fa-apple"></i> MacOS</a>
+    <section class="hero" id="home">
+        <div class="hero-card">
+            <div class="hero-content">
+                <h1>AXIOM</h1>
+                <p>Твой новый опыт в синих тонах!</p>
+                <div class="btn-group">
+                    <a href="https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/Axiom.Dash._.ADPS.zip" class="btn">
+                        <i class="fab fa-windows"></i> Windows
+                    </a>
+                    <a href="https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/Axiom.Dash._.ADPS.apk" class="btn">
+                        <i class="fab fa-android"></i> Android
+                    </a>
+                    <a href="https://github.com/AlbeePython/axiom-launcher/wiki/%D0%9A%D0%B0%D0%BA-%D0%B8%D0%B3%D1%80%D0%B0%D1%82%D1%8C-%D0%B2-ADPS-%D1%81-MacOS%3F" class="btn btn-gh">
+                        <i class="fab fa-macos"></i> MacOS
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- НОВОСТИ -->
-    <section id="news" style="background: #0c0c0c;">
-        <h2 style="margin-bottom: 40px;">Последние новости</h2>
-        <div class="news-container">
-            <span class="news-tag">@albee_ldps</span>
-            <h3>ОБНОВЛЕНИЕ 1.0</h3>
-            <p style="margin-top: 15px; color: #bbb;">Мы уже начали разроботку лаунчера для GDPS скачать его можно будет на офицальном сайте</p>
-            <a href="https://discord.com/channels/1494937285165060196/1494937747842924544" class="news-link" target="_blank">
-                <i class="fab fa-discord"></i> Перейти в канал #news
-            </a>
+    <section class="stats-section" id="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h2>3</h2>
+                <p>Игроков</p>
+            </div>
+            <div class="stat-item">
+                <h2>1</h2>
+                <p>Уровней</p>
+            </div>
+            <div class="stat-item">
+                <h2>1</h2>
+                <p>Модерация</p>
+            </div>
+        </div>
+        <p style="color: #3498db; font-weight: bold; font-size: 18px;">Присоединяйся и увеличивай этот список!</p>
+        <div style="color: #222; font-size: 11px; margin-top: 30px;">
+            Список обновляется каждые 12 - 24 часа.
         </div>
     </section>
 
-    <!-- ИНФОРМАЦИЯ -->
-    <section id="info">
-        <h2>О сервере</h2>
-        <div class="info-grid">
-            <div class="info-card">
-                <i class="fas fa-rocket" style="color:#e63946; font-size: 2.5rem; margin-bottom: 20px;"></i>
-                <h3>Скорость</h3>
-                <p>Высокая частота кадров и отсутствие лагов на любых уровнях.</p>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-crown" style="color:#e63946; font-size: 2.5rem; margin-bottom: 20px;"></i>
-                <h3>Топ 100</h3>
-                <p>Уникальная таблица лидеров и система наград для лучших игроков.</p>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-heart" style="color:#e63946; font-size: 2.5rem; margin-bottom: 20px;"></i>
-                <h3>Поддержка</h3>
-                <p>Наша команда всегда готова помочь в Discord 24/7.</p>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-rocket" style="color:#e63946; font-size: 2.5rem; margin-bottom: 20px;"></i>
-                <h3>Возможности</h3>
-                <p>Постоянный онлайн и постоянная поддержка</p>
-            </div>
+    <section class="about-section" id="about">
+        <div class="info-card">
+            <h3>Будущее GDPS</h3>
+            <p>Axiom Dash предлагает уникальный взгляд на Geometry Dash. Наша цель — создать самую стабильную и красивую платформу для игроков любого уровня. Мы используем выделенные сервера с защитой от DDoS, чтобы твой прогресс всегда был в безопасности.</p>
+        </div>
+        <div class="info-card">
+            <h3>Axiom Launcher</h3>
+            <p>Забудь о ручной установке APK и замене файлов. Наш лаунчер всё сделает за тебя. Автоматическое обновление и оптимизация под слабые ПК — всё это доступно будет уже скоро для нашего комьюнити.</p>
         </div>
     </section>
 
     <footer>
-        &copy; 2026 Axiom Dash. Сделано с любовью для GD-комьюнити.
+        <div style="font-weight: 900; font-size: 24px; color: var(--accent-blue);">AXIOM LAUNCHER 2026</div>
+        <div style="color: #444; font-size: 14px; margin-top: 5px;">для удобства гд комьюнити &lt;3</div>
+
+        <div class="footer-nav">
+            <a href="https://discord.gg/AwRmVpEygR">Дискорд</a>
+            <a href="https://axiomdash.ps.fhgdps.com/dashboard/">Панель управления</a>
+            <a href="https://geodash.org/terms/">Условия соглашения</a>
+            <a href="https://geometrya-dash.ru/politika/?ysclid=mo5ta3myux176325334">Конфиденциальность</a>
+        </div>
+        
+        <div style="color: #222; font-size: 11px; margin-top: 30px;">
+            Axiom Dash — фанатский проект. Все права на Geometry Dash принадлежат RobTop Games.
+        </div>
     </footer>
 
 </body>
