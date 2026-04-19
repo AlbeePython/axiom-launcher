@@ -28,7 +28,7 @@ jobs:
           chmod +x release/MyGDPS-Linux/start.sh
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MyGDPS-Linux-Version
           path: release/MyGDPS-Linux/
