@@ -11,19 +11,24 @@ jobs:
       - name: Prepare GDPS Package
         run: |
           mkdir -p release/MyGDPS-Linux
-          wget https://github.com -O game.zip
-          unzip game.zip -d release/MyGDPS-Linux/
           
-          # ПЕРЕИМЕНОВЫВАЕМ ФАЙЛ (убираем вертикальную черту)
-          # Замени старое имя на новое без черточки
+          # 1. Скачиваем с флагом -L (чтобы GitHub отдал файл, а не ошибку)
+          curl -L "https://github.com/AlbeePython/axiom-launcher/releases/download/release_1.0/" -o Axiom.Dash._.ADPS.zip
+          
+          # 2. Распаковываем
+          unzip Axiom.Dash._.ADPS.zip -d release/MyGDPS-Linux/
+          
+          # 3. Исправляем имя файла с чертой | (из-за которого была прошлая ошибка)
           cd release/MyGDPS-Linux/
-          mv "Axiom Dash | ADPS.exe" "Axiom_Dash_ADPS.exe" 2>/dev/null || true
-          cd ../..
-
-          # Создаем скрипт-запускатор с НОВЫМ именем
-          echo '#!/bin/bash' > release/MyGDPS-Linux/start.sh
-          echo 'wine Axiom_Dash_ADPS.exe' >> release/MyGDPS-Linux/start.sh
-          chmod +x release/MyGDPS-Linux/start.sh
+          # Эта команда найдет файл с чертой и заменит её на нижнее подчеркивание
+          find . -name "*|*" -exec bash -c 'mv "$1" "${1//|/_}"' -- {} \;
+          
+          # 4. Создаем скрипт запуска
+          echo '#!/bin/bash' > start.sh
+          # Ищем любой .exe файл и прописываем его в запуск (автоматически)
+          EXE_NAME=$(ls *.exe | head -n 1)
+          echo "wine \"$EXE_NAME\"" > start.sh
+          chmod +x start.sh
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
