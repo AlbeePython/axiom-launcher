@@ -28,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* Навигация как на скриншоте */
         .navbar {
             margin-top: 20px;
             width: 90%;
@@ -48,7 +47,6 @@
         .logo span { color: var(--accent-blue); }
         .nav-links { display: flex; gap: 20px; font-size: 0.8rem; color: var(--text-secondary); font-weight: bold; text-transform: uppercase; }
 
-        /* Контейнер контента */
         .order-container {
             margin-top: 50px;
             width: 90%;
@@ -66,7 +64,6 @@
             margin-bottom: 30px;
         }
 
-        /* Сетка оплаты */
         .payment-grid {
             display: grid;
             grid-template-columns: 250px 1fr;
@@ -78,7 +75,6 @@
             box-shadow: 0 0 40px rgba(52, 152, 219, 0.1);
         }
 
-        /* Кнопки слева */
         .methods-list { display: flex; flex-direction: column; gap: 15px; }
         .m-btn {
             background: rgba(255,255,255,0.03);
@@ -97,7 +93,6 @@
             border-color: transparent;
         }
 
-        /* Правая часть */
         .details-panel { text-align: left; padding-left: 20px; }
         .price-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 5px; }
         .strike { text-decoration: line-through; color: #ff4757; opacity: 0.6; margin-right: 10px; }
@@ -126,7 +121,9 @@
             width: 100%;
             margin-top: 20px;
             box-shadow: 0 5px 15px var(--glow-blue);
+            transition: 0.3s;
         }
+        .main-action-btn:active { transform: scale(0.98); }
 
         #qr-img { width: 100%; max-width: 180px; border-radius: 15px; margin-top: 20px; display: none; border: 2px solid var(--accent-blue); }
 
@@ -147,13 +144,13 @@
 
     <div class="payment-grid">
         <div class="methods-list">
-            <div class="m-btn active" onclick="changeTab('sbp', this)">СБП</div>
+            <div class="m-btn" id="default-tab" onclick="changeTab('sbp', this)">СБП</div>
             <div class="m-btn" onclick="changeTab('steam', this)">Steam</div>
             <div class="m-btn" onclick="changeTab('discord', this)">Discord</div>
         </div>
 
         <div class="details-panel" id="content">
-            <!-- Сюда вставляется контент -->
+            <!-- Контент подгружается автоматически -->
         </div>
     </div>
 </div>
@@ -177,8 +174,8 @@
                 <div style="margin-bottom: 20px;"><span class="strike">500</span> 50 рублей <span class="badge">СУПЕР СКИДКА</span></div>
                 <p style="color: var(--text-secondary)">Метод: СБП</p>
                 <p style="font-size:0.9rem">1. Нажмите кнопку ниже</p>
-                <p style="font-size:0.9rem">2. Оплатите по qr сумму выше</p>
-                <p style="font-size:0.9rem">3. Получите чек и напишите в дискорд albee_ldps</p>
+                <p style="font-size:0.9rem">2. Оплатите по QR сумму выше</p>
+                <p style="font-size:0.9rem">3. Получите чек и напишите в Discord: <b>albee_ldps</b></p>
                 <button class="main-action-btn" onclick="showSbp()">Оплатить</button>
                 <img src="oplata.png" id="qr-img">
                 <div id="check-zone" style="display:none; margin-top:20px;">
@@ -195,16 +192,16 @@
                     <div style="color:var(--text-secondary); font-size:0.7rem">--- КЛИКНИ ЧТОБЫ КОПИРОВАТЬ ---</div>
                     <div style="font-size:1.4rem; font-weight:900; margin:10px 0;">negative_dash</div>
                 </div>
-                <p style="font-size:0.8rem; color:var(--text-secondary)">2. Используйте сайты для пополнения стим и пополните на этот айди сумму указанную выше</p>
-                <p style="color:#ff4757; font-weight:bold; font-size:0.8rem">ОБЯЗАТЕЛЬНО СДЕЛАЙТЕ СКРИНШОТ ПОСЛЕ ОПЛАТЫ! </p>
+                <p style="font-size:0.8rem; color:var(--text-secondary)">2. Используйте сайты для пополнения Steam и пополните на этот ID сумму выше.</p>
+                <p style="color:#ff4757; font-weight:bold; font-size:0.8rem">ОБЯЗАТЕЛЬНО СДЕЛАЙТЕ СКРИНШОТ ПОСЛЕ ОПЛАТЫ!</p>
                 <button class="main-action-btn" onclick="saveCheck()">Я ОПЛАТИЛ</button>
             `;
         } else if(method === 'discord') {
             currentMethod = 'Discord';
             container.innerHTML = `
                 <div class="price-title">SPONSOR</div>
-                <p style="font-size:0.9rem">1. Отправьте заявку в друзья</p>
-                <div class="copy-card" onclick="copy('albee_ldps')
+                <p style="font-size:0.9rem">1. Отправьте заявку в друзья:</p>
+                <div class="copy-card" onclick="copy('albee_ldps')">
                     <div style="font-size:1.4rem; font-weight:900;">albee_ldps</div>
                 </div>
                 <p style="font-size:0.8rem; color:var(--text-secondary)">2. Договоритесь об оплате напрямую.</p>
@@ -234,8 +231,10 @@
         a.click();
     }
 
-    // Старт
-    changeTab('sbp', document.querySelector('.m-btn'));
+    // Загрузка первой вкладки при старте
+    window.onload = function() {
+        changeTab('sbp', document.getElementById('default-tab'));
+    };
 </script>
 </body>
 </html>
