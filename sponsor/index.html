@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM DASH | SPONSOR</title>
+    <style>
+        @import url('https://googleapis.com');
+
+        :root {
+            --bg-color: #050a12;
+            --panel-bg: rgba(13, 25, 41, 0.8);
+            --accent-blue: #3498db;
+            --glow-blue: rgba(52, 152, 219, 0.5);
+            --text-main: #ffffff;
+            --text-secondary: #8ba2b9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% -20%, #1a365d 0%, #050a12 60%);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Навигация как на скриншоте */
+        .navbar {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 900px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: 1px; }
+        .logo span { color: var(--accent-blue); }
+        .nav-links { display: flex; gap: 20px; font-size: 0.8rem; color: var(--text-secondary); font-weight: bold; text-transform: uppercase; }
+
+        /* Контейнер контента */
+        .order-container {
+            margin-top: 50px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .order-id {
+            background: rgba(255,255,255,0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        /* Сетка оплаты */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            background: var(--panel-bg);
+            padding: 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 40px rgba(52, 152, 219, 0.1);
+        }
+
+        /* Кнопки слева */
+        .methods-list { display: flex; flex-direction: column; gap: 15px; }
+        .m-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            font-weight: bold;
+        }
+        .m-btn:hover, .m-btn.active {
+            background: var(--accent-blue);
+            box-shadow: 0 0 20px var(--glow-blue);
+            border-color: transparent;
+        }
+
+        /* Правая часть */
+        .details-panel { text-align: left; padding-left: 20px; }
+        .price-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 5px; }
+        .strike { text-decoration: line-through; color: #ff4757; opacity: 0.6; margin-right: 10px; }
+        .badge { background: #ff4757; font-size: 0.6rem; padding: 3px 8px; border-radius: 5px; vertical-align: middle; }
+
+        .copy-card {
+            background: #0a111a;
+            border: 1px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .copy-card:hover { transform: scale(1.02); }
+
+        .main-action-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px var(--glow-blue);
+        }
+
+        #qr-img { width: 100%; max-width: 180px; border-radius: 15px; margin-top: 20px; display: none; border: 2px solid var(--accent-blue); }
+
+        .footer { margin-top: 50px; padding: 30px; opacity: 0.4; font-size: 0.7rem; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">AXIOM<span>DASH</span></div>
+    <div class="nav-links">
+        <span>Покупка sponsor</span>
+    </div>
+</div>
+
+<div class="order-container">
+    <div class="order-id" id="orderId">Заказ № ADPS-000-000</div>
+
+    <div class="payment-grid">
+        <div class="methods-list">
+            <div class="m-btn active" onclick="changeTab('sbp', this)">СБП</div>
+            <div class="m-btn" onclick="changeTab('steam', this)">Steam</div>
+            <div class="m-btn" onclick="changeTab('discord', this)">Discord</div>
+        </div>
+
+        <div class="details-panel" id="content">
+            <!-- Сюда вставляется контент -->
+        </div>
+    </div>
+</div>
+
+<div class="footer">© AXIOM DASH LICENSE 2026 | OFFICIAL PROJECT</div>
+
+<script>
+    let currentMethod = 'СБП';
+    const randomId = `ADPS-${Math.floor(100+Math.random()*899)}-${Math.floor(1000+Math.random()*8999)}`;
+    document.getElementById('orderId').innerText = `Заказ № ${randomId}`;
+
+    function changeTab(method, el) {
+        document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        const container = document.getElementById('content');
+
+        if(method === 'sbp') {
+            currentMethod = 'СБП';
+            container.innerHTML = `
+                <div class="price-title">SPONSOR</div>
+                <div style="margin-bottom: 20px;"><span class="strike">500</span> 50 рублей <span class="badge">СУПЕР СКИДКА</span></div>
+                <p style="font-size:0.9rem">1. Откройте ваше банковское приложен или камеру</p>
+                <p style="font-size:0.9rem">2. Нажмите *Оплатить* и наведитесь на qr камерой</p>
+                <p style="font-size:0.9rem">3. Нажмите я оплатил получите чек и отправьте его в дискорд albee_ldps</p>
+                <button class="main-action-btn" onclick="showSbp()">Оплатить</button>
+                <img src="oplata.png" id="qr-img">
+                <div id="check-zone" style="display:none; margin-top:20px;">
+                    <button class="main-action-btn" style="background:#2ecc71; box-shadow: 0 5px 15px rgba(46,204,113,0.3)" onclick="saveCheck()">Я ОПЛАТИЛ</button>
+                </div>
+            `;
+        } else if(method === 'steam') {
+            currentMethod = 'Steam';
+            container.innerHTML = `
+                <div class="price-title">SPONSOR</div>
+                <div style="margin-bottom: 20px;"><span class="strike">500</span> 50 рублей</div>
+                <p style="font-size:0.9rem">1. Скопируйте STEAM ID:</p>
+                <div class="copy-card" onclick="copy('negative_dash')">
+                    <div style="color:var(--text-secondary); font-size:0.7rem">--- КЛИКНИ ЧТОБЫ КОПИРОВАТЬ ---</div>
+                    <div style="font-size:1.4rem; font-weight:900; margin:10px 0;">negative_dash</div>
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-secondary)">2. Используйте сайт для пополнения Steam и пополните на указанную сумму выше.</p>
+                <p style="color:#ff4757; font-weight:bold; font-size:0.8rem">ОБЯЗАТЕЛЬНО СДЕЛАЙТЕ СКРИНШОТ!</p>
+                <button class="main-action-btn" onclick="saveCheck()">Я ОПЛАТИЛ</button>
+            `;
+        } else if(method === 'discord') {
+            currentMethod = 'Discord';
+            container.innerHTML = `
+                <div class="price-title">SPONSOR</div>
+                <p style="font-size:0.9rem">1. Добавьте в друзья в Discord:</p>
+                <div class="copy-card" onclick="copy('albee_ldps')">
+                    <div style="font-size:1.4rem; font-weight:900;">albee_ldps</div>
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-secondary)">2. Договоритесь об оплате напрямую.</p>
+                <button class="main-action-btn" onclick="saveCheck()">Я ОПЛАТИЛ (ЧЕК)</button>
+            `;
+        }
+    }
+
+    function showSbp() {
+        document.getElementById('qr-img').style.display = 'block';
+        document.getElementById('check-zone').style.display = 'block';
+    }
+
+    function copy(txt) {
+        navigator.clipboard.writeText(txt);
+        alert('Скопировано: ' + txt);
+    }
+
+    function saveCheck() {
+        const time = new Date().toLocaleString();
+        const content = `Номер заказа: ${randomId}\nВремя: ${time}\nМетод: ${currentMethod}\nbutton touch: ДА`\ \© ADPS license | official;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `AXIOM_CHECK_${randomId}.txt`;
+        a.click();
+    }
+
+    // Старт
+    changeTab('sbp', document.querySelector('.m-btn'));
+</script>
+</body>
+</html>
