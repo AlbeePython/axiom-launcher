@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOMDASH - Privacy Policy</title>
+    <style>
+        /* Стили полностью идентичны для единства дизайна */
+        :root {
+            --bg-color: #05070a;
+            --panel-bg: #0d1117;
+            --accent-blue: #3498db;
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+            --glow: 0 0 20px rgba(52, 152, 219, 0.3);
+        }
 
+        body { margin: 0; background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; }
+        header { width: 90%; max-width: 1100px; margin-top: 20px; padding: 15px 35px; background: var(--panel-bg); border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(52, 152, 219, 0.2); box-shadow: var(--glow); }
+        .logo { font-weight: 800; font-size: 1.3em; letter-spacing: 1px; }
+        .logo span { color: var(--accent-blue); }
+        .nav-title { font-size: 0.85em; font-weight: bold; text-transform: uppercase; color: var(--text-dim); }
+        .container { width: 90%; max-width: 1000px; margin: 40px 0; background: var(--panel-bg); border: 1px solid rgba(52, 152, 219, 0.4); border-radius: 12px; padding: 40px; box-shadow: var(--glow); }
+        h1 { margin-top: 0; text-align: center; color: var(--accent-blue); text-transform: uppercase; font-size: 2.5em; letter-spacing: 3px; }
+        .scroll-area { max-height: 70vh; overflow-y: auto; padding-right: 15px; }
+        .rule-item { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .rule-item h3 { color: var(--accent-blue); margin-bottom: 10px; font-size: 1.1em; }
+        .rule-item p { line-height: 1.7; color: var(--text-dim); font-size: 0.95em; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AXIOM<span>DASH</span></div>
+        <div class="nav-title">Конфиденциальность</div>
+    </header>
+
+    <div class="container">
+        <h1>PRIVACY</h1>
+        <div class="scroll-area" id="list"></div>
+    </div>
+
+    <script>
+        const items = [
+            "Общие положения", "Какие данные мы собираем", "Идентификация через IP", "Куки-файлы (Cookies)", 
+            "Шифрование паролей", "Безопасность на GDPSFH", "Цели сбора информации", "Доступ третьих лиц", 
+            "Логирование действий", "Статистика по уровням", "Интеграция с Discord", "Электронная почта", 
+            "Защита от взломов", "Хранение данных", "Удаление информации", "Права пользователей", 
+            "Возрастная политика (COPPA)", "Международная передача", "Аналитические инструменты", "Маркетинговые уведомления", 
+            "Резервное копирование", "Изменение политики", "Согласие на обработку", "Контактные данные оператора", 
+            "Процедура жалоб", "Безопасность БД", "Анонимизация данных", "Публичный профиль", 
+            "Отказ от обслуживания", "Заключение"
+        ];
+
+        const list = document.getElementById('list');
+        items.forEach((text, i) => {
+            list.innerHTML += `
+                <div class="rule-item">
+                    <h3>${i+1}. ${text}</h3>
+                    <p>Мы гарантируем полную защиту ваших персональных данных при использовании сервера AXIOM.<br>
+                    Ваш IP-адрес используется исключительно для предотвращения спам-атак и мультиаккаунтов.<br>
+                    Вся информация хранится на защищенных мощностях хостинг-провайдера в зашифрованном виде.<br>
+                    Мы никогда не продаем и не передаем ваши данные рекламным сетям или иным лицам.<br>
+                    Вы можете в любой момент потребовать выгрузку своих данных или их полное удаление.<br>
+                    Регулярно проверяйте этот документ, так как мы можем вносить в него технические правки.</p>
+                </div>`;
+        });
+    </script>
+</body>
+</html>
