@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ADPS Hub - Select Section</title>
+    <style>
+        :root { --bg: #0a0e17; --card: #161d2b; --accent: #007bff; --text: #e1e1e1; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        h1 { margin-bottom: 40px; text-shadow: 0 0 15px var(--accent); }
+        .menu { display: flex; gap: 20px; }
+        .menu-item { 
+            background: var(--card); border: 1px solid #1f293d; padding: 30px; border-radius: 20px; 
+            width: 200px; text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; color: white;
+        }
+        .menu-item:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0, 123, 255, 0.2); }
+        .menu-item i { font-size: 3rem; display: block; margin-bottom: 15px; color: var(--accent); }
+    </style>
+</head>
+<body>
+    <h1>Выберите раздел ADPS</h1>
+    <div class="menu">
+        <a href="https://albeepython.github.io/axiom-launcher/choose/chat/index.html" class="menu-item">
+            <span>💬</span>
+            <h3>Global Chat</h3>
+        </a>
+        <a href="https://albeepython.github.io/axiom-launcher/choose/demonlist/index.html" class="menu-item">
+            <span>🔥</span>
+            <h3>Demon List</h3>
+        </a>
+        <a href="https://albeepython.github.io/axiom-launcher/choose/updates/index.html" class="menu-item">
+            <span>🗺️</span>
+            <h3>Roadmap</h3>
+        </a>
+    </div>
+</body>
+</html>
