@@ -3,132 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>ADPS Global Chat</title>
-    <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getDatabase, ref, push, onChildAdded, serverTimestamp, query, limitToLast, get, set, remove, onDisconnect } from "https://gstatic.com";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyC0kGxFHYTRLcWTextgHqguZeaxkwHS5KY",
-            authDomain: "://firebaseapp.com",
-            projectId: "adps-rateing-system",
-            databaseURL: "https://firebaseio.com",
-            appId: "1:307068938310:web:c5b8286dd592bd32694247"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        
-        // Хеш пароля "192837465"
-        const ADMIN_HASH = "80f1246995648835848202d6b38c23805b58390b793f619b0d1e56b460d3d527";
-        
-        let chatUser = sessionStorage.getItem('chatNickname') || null;
-        let idleTimer, warnTimer;
-
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        const resetTimers = () => {
-            clearTimeout(idleTimer); clearTimeout(warnTimer);
-            warnTimer = setTimeout(() => addBotMessage("System", "Inactivity warning: 5m left."), 5 * 60 * 1000);
-            idleTimer = setTimeout(() => exitChat("Kicked for inactivity"), 10 * 60 * 1000);
-        };
-
-        const addBotMessage = (sender, text) => {
-            const chatMessages = document.getElementById('chat-messages');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message bot-msg';
-            msgDiv.innerHTML = `<div class="sender">[BOT] ${sender}</div><div class="text">${text}</div>`;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        const exitChat = (reason) => {
-            if (chatUser) {
-                remove(ref(db, 'active_users/' + chatUser));
-                sessionStorage.removeItem('chatNickname');
-                if (reason) alert(reason);
-                location.reload();
-            }
-        };
-
-        const setupChat = () => {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('chat-container').style.display = 'flex';
-            document.getElementById('user-display').innerText = `ID: ${chatUser}`;
-
-            const userRef = ref(db, 'active_users/' + chatUser);
-            set(userRef, { online: true, time: serverTimestamp() });
-            onDisconnect(userRef).remove();
-
-            resetTimers();
-
-            const chatQuery = query(ref(db, 'global_chat'), limitToLast(50));
-            onChildAdded(chatQuery, (snapshot) => {
-                const data = snapshot.val();
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `message ${data.sender === chatUser ? 'my-msg' : ''}`;
-                const isAdm = data.sender === 'sew1k' ? '<span class="adm-tag">[ADMIN]</span> ' : '';
-                msgDiv.innerHTML = `<div class="sender">${isAdm}${data.sender}</div><div class="text">${data.text}</div>`;
-                document.getElementById('chat-messages').appendChild(msgDiv);
-                document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
-            });
-        };
-
-        // Логика Входа
-        const attemptLogin = async () => {
-            const nick = document.getElementById('nick-input').value.trim();
-            const passInput = document.getElementById('pass-input');
-            
-            if (!nick) return;
-            const digits = (nick.match(/\d/g) || []).length;
-
-            if (nick.length > 7 || nick.length < 2) return alert("Nick: 2-7 symbols!");
-            if (digits > 2) return alert("Max 2 digits!");
-            
-            if (nick === "sew1k") {
-                if (passInput.style.display === 'none') {
-                    passInput.style.display = 'block';
-                    passInput.focus();
-                    return;
-                }
-                const enteredHash = await sha256(passInput.value);
-                if (enteredHash !== ADMIN_HASH) return alert("Wrong Admin Pass!");
-            } else {
-                const snap = await get(ref(db, 'active_users/' + nick));
-                if (snap.exists()) return alert("Nickname taken!");
-            }
-
-            chatUser = nick;
-            sessionStorage.setItem('chatNickname', nick);
-            setupChat();
-        };
-
-        // Обработка кликов и ENTER
-        document.getElementById('enter-btn').onclick = attemptLogin;
-        document.getElementById('nick-input').onkeydown = (e) => { if(e.key === 'Enter') attemptLogin(); };
-        document.getElementById('pass-input').onkeydown = (e) => { if(e.key === 'Enter') attemptLogin(); };
-
-        // Логика Отправки
-        const doSend = () => {
-            const inp = document.getElementById('message-input');
-            const text = inp.value.trim();
-            if (text && chatUser) {
-                push(ref(db, 'global_chat'), { text, sender: chatUser, timestamp: serverTimestamp() });
-                inp.value = '';
-                resetTimers();
-            }
-        };
-
-        document.getElementById('send-btn').onclick = doSend;
-        document.getElementById('message-input').onkeydown = (e) => { if(e.key === 'Enter') doSend(); };
-        document.getElementById('exit-chat').onclick = () => exitChat();
-
-        if (chatUser) setupChat();
-    </script>
-
     <style>
         :root { --bg: #0a0e17; --card: #161d2b; --accent: #007bff; }
         body { margin: 0; background: var(--bg); color: #e1e1e1; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -144,7 +18,6 @@
         .input-area { padding: 15px; background: #1a2233; display: flex; gap: 10px; }
         input { background: #0a0e17; border: 1px solid #2d384e; padding: 12px; border-radius: 10px; color: white; outline: none; flex: 1; }
         button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        button:hover { filter: brightness(1.2); }
     </style>
 </head>
 <body>
@@ -169,6 +42,105 @@
         <button id="send-btn">SEND</button>
     </div>
 </div>
+
+<script type="module">
+    import { initializeApp } from "https://gstatic.com";
+    import { getDatabase, ref, push, onChildAdded, serverTimestamp, query, limitToLast, get, set, remove, onDisconnect } from "https://gstatic.com";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC0kGxFHYTRLcWTextgHqguZeaxkwHS5KY",
+        authDomain: "://firebaseapp.com",
+        projectId: "adps-rateing-system",
+        databaseURL: "https://firebaseio.com",
+        appId: "1:307068938310:web:c5b8286dd592bd32694247"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const ADMIN_HASH = "80f1246995648835848202d6b38c23805b58390b793f619b0d1e56b460d3d527";
+
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    let chatUser = sessionStorage.getItem('chatNickname');
+
+    const setupChat = () => {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('chat-container').style.display = 'flex';
+        document.getElementById('user-display').innerText = "Logged as: " + chatUser;
+
+        const userRef = ref(db, 'active_users/' + chatUser);
+        set(userRef, { online: true });
+        onDisconnect(userRef).remove();
+
+        const chatQuery = query(ref(db, 'global_chat'), limitToLast(50));
+        onChildAdded(chatQuery, (snapshot) => {
+            const data = snapshot.val();
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${data.sender === chatUser ? 'my-msg' : ''}`;
+            const isAdm = data.sender === 'sew1k' ? '<span class="adm-tag">[ADMIN]</span> ' : '';
+            msgDiv.innerHTML = `<div class="sender">${isAdm}${data.sender}</div><div class="text">${data.text}</div>`;
+            document.getElementById('chat-messages').appendChild(msgDiv);
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        });
+    };
+
+    const attemptLogin = async () => {
+        const nick = document.getElementById('nick-input').value.trim();
+        const passInput = document.getElementById('pass-input');
+
+        if (!nick) return;
+
+        if (nick === "sew1k") {
+            if (passInput.style.display === 'none') {
+                passInput.style.display = 'block';
+                passInput.focus();
+                return;
+            }
+            const enteredHash = await sha256(passInput.value);
+            if (enteredHash !== ADMIN_HASH) return alert("Wrong Admin Pass!");
+        } else {
+            if (nick.length > 7 || nick.length < 2) return alert("Nick: 2-7 symbols!");
+            const digits = (nick.match(/\d/g) || []).length;
+            if (digits > 2) return alert("Max 2 digits!");
+            
+            const snap = await get(ref(db, 'active_users/' + nick));
+            if (snap.exists()) return alert("Nickname taken!");
+        }
+
+        chatUser = nick;
+        sessionStorage.setItem('chatNickname', nick);
+        setupChat();
+    };
+
+    // Привязываем события
+    document.getElementById('enter-btn').addEventListener('click', attemptLogin);
+    document.getElementById('nick-input').addEventListener('keydown', (e) => { if(e.key === 'Enter') attemptLogin(); });
+    document.getElementById('pass-input').addEventListener('keydown', (e) => { if(e.key === 'Enter') attemptLogin(); });
+
+    document.getElementById('send-btn').addEventListener('click', () => {
+        const inp = document.getElementById('message-input');
+        if (inp.value.trim() && chatUser) {
+            push(ref(db, 'global_chat'), { text: inp.value.trim(), sender: chatUser, timestamp: serverTimestamp() });
+            inp.value = '';
+        }
+    });
+
+    document.getElementById('message-input').addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') document.getElementById('send-btn').click();
+    });
+
+    document.getElementById('exit-chat').addEventListener('click', () => {
+        if(chatUser) remove(ref(db, 'active_users/' + chatUser));
+        sessionStorage.removeItem('chatNickname');
+        location.reload();
+    });
+
+    if (chatUser) setupChat();
+</script>
 
 </body>
 </html>
