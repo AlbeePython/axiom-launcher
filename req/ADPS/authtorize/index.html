@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - GDPS</title>
+    <style>
+        body { background: #0a0e17; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #161d2b; padding: 40px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #2d384e; background: #1e2638; color: white; box-sizing: border-box; outline: none; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        a { color: #007bff; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>ADPS Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="pass" placeholder="Password">
+        <button id="loginBtn">Sign In</button>
+        <p style="margin-top:20px">No account? <a href="https://albeepython.github.io/axiom-launcher/req/ADPS/register">Register</a></p>
+        <a href="https://albeepython.github.io/axiom-launcher/req/ADPS/home" style="color:gray;">← Back</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
+        const firebaseConfig = { apiKey: "AIzaSyC0kGxFHYTRLcWTextgHqguZeaxkwHS5KY", authDomain: "adps-rateing-system.firebaseapp.com", projectId: "adps-rateing-system", appId: "1:307068938310:web:c5b8286dd592bd32694247" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, e, p)
+                .then(() => window.location.href = "https://albeepython.github.io/axiom-launcher/req/ADPS/home")
+                .catch(err => alert("Login failed: " + err.message));
+        });
+    </script>
+</body>
+</html>
