@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADPS Global Chat</title>
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getDatabase, ref, push, onChildAdded, serverTimestamp, query, limitToLast, get, set, remove, onDisconnect } from "https://gstatic.com";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0kGxFHYTRLcWTextgHqguZeaxkwHS5KY",
+            authDomain: "://firebaseapp.com",
+            projectId: "adps-rateing-system",
+            databaseURL: "https://firebaseio.com",
+            appId: "1:307068938310:web:c5b8286dd592bd32694247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // Хеш пароля "192837465"
+        const ADMIN_HASH = "80f1246995648835848202d6b38c23805b58390b793f619b0d1e56b460d3d527";
+        
+        let chatUser = sessionStorage.getItem('chatNickname') || null;
+        let idleTimer, warnTimer;
+
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const resetTimers = () => {
+            clearTimeout(idleTimer); clearTimeout(warnTimer);
+            warnTimer = setTimeout(() => addBotMessage("System", "Inactivity warning: 5m left."), 5 * 60 * 1000);
+            idleTimer = setTimeout(() => exitChat("Kicked for inactivity"), 10 * 60 * 1000);
+        };
+
+        const addBotMessage = (sender, text) => {
+            const chatMessages = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message bot-msg';
+            msgDiv.innerHTML = `<div class="sender">[BOT] ${sender}</div><div class="text">${text}</div>`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const exitChat = (reason) => {
+            if (chatUser) {
+                remove(ref(db, 'active_users/' + chatUser));
+                sessionStorage.removeItem('chatNickname');
+                if (reason) alert(reason);
+                location.reload();
+            }
+        };
+
+        const setupChat = () => {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'flex';
+            document.getElementById('user-display').innerText = `ID: ${chatUser}`;
+
+            const userRef = ref(db, 'active_users/' + chatUser);
+            set(userRef, { online: true, time: serverTimestamp() });
+            onDisconnect(userRef).remove();
+
+            resetTimers();
+
+            const chatQuery = query(ref(db, 'global_chat'), limitToLast(50));
+            onChildAdded(chatQuery, (snapshot) => {
+                const data = snapshot.val();
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${data.sender === chatUser ? 'my-msg' : ''}`;
+                const isAdm = data.sender === 'sew1k' ? '<span class="adm-tag">[ADMIN]</span> ' : '';
+                msgDiv.innerHTML = `<div class="sender">${isAdm}${data.sender}</div><div class="text">${data.text}</div>`;
+                document.getElementById('chat-messages').appendChild(msgDiv);
+                document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+            });
+        };
+
+        // Логика Входа
+        const attemptLogin = async () => {
+            const nick = document.getElementById('nick-input').value.trim();
+            const passInput = document.getElementById('pass-input');
+            
+            if (!nick) return;
+            const digits = (nick.match(/\d/g) || []).length;
+
+            if (nick.length > 7 || nick.length < 2) return alert("Nick: 2-7 symbols!");
+            if (digits > 2) return alert("Max 2 digits!");
+            
+            if (nick === "sew1k") {
+                if (passInput.style.display === 'none') {
+                    passInput.style.display = 'block';
+                    passInput.focus();
+                    return;
+                }
+                const enteredHash = await sha256(passInput.value);
+                if (enteredHash !== ADMIN_HASH) return alert("Wrong Admin Pass!");
+            } else {
+                const snap = await get(ref(db, 'active_users/' + nick));
+                if (snap.exists()) return alert("Nickname taken!");
+            }
+
+            chatUser = nick;
+            sessionStorage.setItem('chatNickname', nick);
+            setupChat();
+        };
+
+        // Обработка кликов и ENTER
+        document.getElementById('enter-btn').onclick = attemptLogin;
+        document.getElementById('nick-input').onkeydown = (e) => { if(e.key === 'Enter') attemptLogin(); };
+        document.getElementById('pass-input').onkeydown = (e) => { if(e.key === 'Enter') attemptLogin(); };
+
+        // Логика Отправки
+        const doSend = () => {
+            const inp = document.getElementById('message-input');
+            const text = inp.value.trim();
+            if (text && chatUser) {
+                push(ref(db, 'global_chat'), { text, sender: chatUser, timestamp: serverTimestamp() });
+                inp.value = '';
+                resetTimers();
+            }
+        };
+
+        document.getElementById('send-btn').onclick = doSend;
+        document.getElementById('message-input').onkeydown = (e) => { if(e.key === 'Enter') doSend(); };
+        document.getElementById('exit-chat').onclick = () => exitChat();
+
+        if (chatUser) setupChat();
+    </script>
+
+    <style>
+        :root { --bg: #0a0e17; --card: #161d2b; --accent: #007bff; }
+        body { margin: 0; background: var(--bg); color: #e1e1e1; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        #login-screen { flex: 1; display: flex; justify-content: center; align-items: center; }
+        .auth-card { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid #1f293d; width: 280px; }
+        #chat-container { display: none; flex: 1; flex-direction: column; width: 95%; max-width: 800px; margin: 10px auto; background: var(--card); border-radius: 20px; border: 1px solid #1f293d; overflow: hidden; }
+        #chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+        .message { background: #1e2638; padding: 10px 15px; border-radius: 12px; max-width: 75%; align-self: flex-start; border: 1px solid #2d384e; }
+        .my-msg { align-self: flex-end; background: var(--accent); border-color: #0056b3; }
+        .bot-msg { align-self: center; background: rgba(255,255,255,0.05); border: 1px dashed #444; color: #888; font-size: 0.8rem; }
+        .sender { font-size: 0.7rem; font-weight: bold; margin-bottom: 3px; color: #00ff00; }
+        .adm-tag { color: #ffcc00; text-shadow: 0 0 5px gold; font-weight: 900; }
+        .input-area { padding: 15px; background: #1a2233; display: flex; gap: 10px; }
+        input { background: #0a0e17; border: 1px solid #2d384e; padding: 12px; border-radius: 10px; color: white; outline: none; flex: 1; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        button:hover { filter: brightness(1.2); }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="auth-card">
+        <h3 style="margin-top:0">ADPS Global</h3>
+        <input type="text" id="nick-input" placeholder="Nickname" maxlength="7">
+        <input type="password" id="pass-input" placeholder="Admin Password" style="display:none; margin-top:10px;">
+        <button id="enter-btn" style="margin-top:15px; width:100%">ENTER</button>
+    </div>
+</div>
+
+<div id="chat-container">
+    <header style="padding: 10px 20px; background: #1a2233; display: flex; justify-content: space-between; border-bottom: 1px solid #1f293d;">
+        <span id="user-display" style="font-size: 0.8rem; opacity: 0.6;"></span>
+        <span id="exit-chat" style="cursor:pointer; color:#dc3545; font-weight:bold; font-size: 0.8rem;">EXIT</span>
+    </header>
+    <div id="chat-messages"></div>
+    <div class="input-area">
+        <input type="text" id="message-input" placeholder="Message...">
+        <button id="send-btn">SEND</button>
+    </div>
+</div>
+
+</body>
+</html>
